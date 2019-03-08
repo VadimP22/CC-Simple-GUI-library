@@ -2,6 +2,11 @@ CountOfElements = 0
 ElementList = {}
 
 function processall()
+    
+    event = {os.pullEvent()}
+    
+    --print(button)
+    --sleep(0.1)
     for i = 1, CountOfElements do 
     ElementList[i].process()
 end
@@ -27,15 +32,35 @@ button.x2 = x2
 button.y2 = y2
 button.is_clicked = false
 button.clickable = true
-button.onclick = nil
+button.onclick = function()
+--return 0
+end
 button.process = function() 
+event = {os.pullEvent()}
 --term.setBackgroundColor(colors.black)
 local col
+
+
+if event[1] == "mouse_click" then
+if event[3] >= button.x1 and event[3] <= button.x2 and event[4] >= button.y1 and event[4] <= button.y2 and button.clickable == true then
+button.clicked = true
+
+button.onclick()
+end
+--else
+--button.clicked = false
+
+end
+--end
+
 if button.clickable==true then
 col = colors.blue
 else
     col = colors.lightGray
 
+end
+if button.clicked == true then
+col = colors.lightBlue
 end
 
 
@@ -54,13 +79,13 @@ end
 end
 end
 end
-
+button.clicked = false
 end
 ElementList[CountOfElements] = button
 return button
 
 end
-
+--end of function createbutton()
 
 
 

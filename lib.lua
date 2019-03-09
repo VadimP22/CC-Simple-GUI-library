@@ -64,7 +64,8 @@ function createbutton(buttontext,x1,y1)
 
     button.process = function() 
         local col = colors.blue
-        if event[1] == "mouse_click" and event[3] >= button.x1 and event[3] < button.x1 + string.len(buttontext) and event[4] == button.y1 then
+        
+        if event[1] == "mouse_click" and event[3] >= button.x1 and event[3] < button.x1 + string.len(buttontext) and event[4] == button.y1 and button.clickable == true then
             --col = colors.lightBlue TODO
             button.onclick()
         end
@@ -81,7 +82,12 @@ function createbutton(buttontext,x1,y1)
 
     button.processonmonitor = function()
         local col = colors.blue
-        if event2[1] == "monitor_touch" and event2[3] >= button.x1 and event2[3] < button.x1 + string.len(buttontext) and event2[4] == button.y1 then
+
+        if button.clickable == false then
+            col = colors.lightGray
+        end
+
+        if event2[1] == "monitor_touch" and event2[3] >= button.x1 and event2[3] < button.x1 + string.len(buttontext) and event2[4] == button.y1 and button.clickable == true then
         --    --col = colors.lightBlue TODO
             button.onclick()
         end
@@ -102,12 +108,36 @@ function createbutton(buttontext,x1,y1)
 end
 --end of function createbutton()
 
+function createtext(st,x1,y1)
+    CountOfElements = CountOfElements + 1
+    text = {}
+    text.x = x1
+    text.y = y1
+    text.tx = st
+
+    text.processonmonitor = function()
+
+        for i = 0, string.len(text.tx) - 1 do
+            
+            m.setCursorPos(text.x + i, text.y)
+            m.setBackgroundColor(colors.black)
+            m.setTextColor(colors.white)
+            m.write(string.sub(text.tx,i+1,i+1))
+        end
+
+    end
+    --end of function processonmonitor()
 
 
+    ElementList[CountOfElements] = text
+    return text
+end
+--end of function createtext()
 
 --Library table creating and return
 libtable = {
     CreateButton = createbutton,
+    CreateText = createtext,
     Draw = processall,
     DrawM = processallonmonitor,
     SetSide = setperipheral
